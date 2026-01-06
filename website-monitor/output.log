@@ -1,0 +1,16 @@
+
+> website-monitor@0.1.0 start
+> next start --port 5000
+
+   ▲ Next.js 15.1.6
+   - Local:        http://localhost:5000
+   - Network:      http://9.129.178.160:5000
+
+ ✓ Starting...
+ ⚠ Invalid next.config.js options detected: 
+ ⚠     Unrecognized key(s) in object: 'fontLoaders' at "experimental"
+ ⚠ See more info here: https://nextjs.org/docs/messages/invalid-next-config
+ ✓ Ready in 433ms
+Login error: SyntaxError: Expected property name or '}' in JSON at position 1 (line 1 column 2)
+    at JSON.parse (<anonymous>)
+Killed

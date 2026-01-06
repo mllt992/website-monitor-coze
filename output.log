@@ -1,0 +1,18 @@
+Clearing port 5000 before start.
+Port 5000 in use by PIDs: 9837 (SIGKILL)
+Port 5000 cleared.
+Starting HTTP service on port 5000 for deploy...
+Starting HTTP service on port 5000 for deploy...
+
+> website-monitor@0.1.0 start
+> next start --port 5000
+
+   ▲ Next.js 15.1.6
+   - Local:        http://localhost:5000
+   - Network:      http://9.129.169.24:5000
+
+ ✓ Starting...
+ ⚠ Invalid next.config.js options detected: 
+ ⚠     Unrecognized key(s) in object: 'fontLoaders' at "experimental"
+ ⚠ See more info here: https://nextjs.org/docs/messages/invalid-next-config
+ ✓ Ready in 391ms

@@ -1,0 +1,11 @@
+mysql2
+bcryptjs
+jsonwebtoken
+nodemailer
+date-fns
+lucide-react
+framer-motion
+@headlessui/react
+@types/bcryptjs
+@types/jsonwebtoken
+@types/nodemailer

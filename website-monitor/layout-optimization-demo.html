@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>监控布局优化测试</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: #F2F2F7;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(60px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            box-shadow: 0 24px 48px -12px rgba(0, 0, 0, 0.08);
+            border-radius: 40px;
+            padding: 16px 24px;
+            margin-bottom: 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .card {
+            background: rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(60px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            box-shadow: 0 24px 48px -12px rgba(0, 0, 0, 0.08);
+            border-radius: 32px;
+            padding: 24px;
+            margin-bottom: 16px;
+            transition: all 0.3s ease;
+        }
+        
+        .card:hover {
+            box-shadow: 0 32px 64px -16px rgba(0, 0, 0, 0.12);
+            transform: scale(0.98);
+        }
+        
+        .title-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+        
+        .website-name {
+            font-size: 18px;
+            font-weight: 800;
+            color: #1C1C1E;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+        
+        .website-name:hover {
+            color: #007AFF;
+        }
+        
+        .status-badge {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            border-radius: 16px;
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            border: 1px solid;
+        }
+        
+        .status-healthy {
+            background: rgba(34, 197, 94, 0.1);
+            color: rgb(21, 128, 61);
+            border-color: rgb(134, 239, 172);
+        }
+        
+        .status-warning {
+            background: rgba(250, 204, 21, 0.1);
+            color: rgb(146, 114, 24);
+            border-color: rgb(252, 211, 77);
+        }
+        
+        .status-error {
+            background: rgba(239, 68, 68, 0.1);
+            color: rgb(185, 28, 28);
+            border-color: rgb(252, 165, 165);
+        }
+        
+        .category-badge {
+            padding: 6px 12px;
+            border-radius: 16px;
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: white;
+        }
+        
+        .url-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: #8E8E93;
+            margin-bottom: 12px;
+            font-size: 14px;
+        }
+        
+        .url-link {
+            color: #8E8E93;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        
+        .url-link:hover {
+            color: #007AFF;
+        }
+        
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 12px;
+            color: #8E8E93;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            font-weight: 700;
+        }
+        
+        .actions {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-left: 24px;
+        }
+        
+        .action-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 20px;
+            border: none;
+            background: transparent;
+            color: #8E8E93;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+        
+        .action-btn:hover {
+            transform: scale(0.95);
+        }
+        
+        .action-btn.check:hover {
+            color: #10b981;
+            background: rgba(16, 185, 129, 0.1);
+        }
+        
+        .action-btn.edit:hover {
+            color: #3b82f6;
+            background: rgba(59, 130, 246, 0.1);
+        }
+        
+        .action-btn.delete:hover {
+            color: #ef4444;
+            background: rgba(239, 68, 68, 0.1);
+        }
+        
+        .website-content {
+            display: flex;
+            align-items: flex-start;
+        }
+        
+        .website-info {
+            flex: 1;
+            min-width: 0;
+        }
+        
+        .comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-top: 40px;
+        }
+        
+        .old-layout, .new-layout {
+            border: 2px solid #ddd;
+            border-radius: 12px;
+            padding: 16px;
+        }
+        
+        .old-layout {
+            border-color: #ef4444;
+            background: rgba(239, 68, 68, 0.05);
+        }
+        
+        .new-layout {
+            border-color: #10b981;
+            background: rgba(16, 185, 129, 0.05);
+        }
+        
+        .layout-title {
+            font-weight: 700;
+            margin-bottom: 12px;
+            padding: 8px 12px;
+            border-radius: 8px;
+            color: white;
+            text-align: center;
+        }
+        
+        .old-layout .layout-title {
+            background: #ef4444;
+        }
+        
+        .new-layout .layout-title {
+            background: #10b981;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 style="text-align: center; margin-bottom: 30px; font-size: 24px; font-weight: 800; color: #1C1C1E;">
+            网站监控系统布局优化效果对比
+        </h1>
+        
+        <div class="comparison">
+            <div class="old-layout">
+                <div class="layout-title">优化前 (旧布局)</div>
+                <div style="background: rgba(255, 255, 255, 0.5); backdrop-filter: blur(60px); border: 1px solid rgba(255, 255, 255, 0.6); box-shadow: 0 24px 48px -12px rgba(0, 0, 0, 0.08); border-radius: 40px; padding: 32px; margin-bottom: 24px;">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                        <div style="flex: 1; min-width: 0;">
+                            <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 12px;">
+                                <h3 style="font-size: 18px; font-weight: 800; color: #1C1C1E;">示例网站</h3>
+                                <div style="padding: 8px 16px; border-radius: 20px; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; border: 1px solid rgb(134, 239, 172); background: rgba(34, 197, 94, 0.1); color: rgb(21, 128, 61);">
+                                    健康状态
+                                </div>
+                            </div>
+                            <div style="color: #8E8E93; margin-bottom: 12px;">https://example.com</div>
+                            <div style="font-size: 12px; color: #8E8E93; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 700;">
+                                响应时间: 869ms
+                            </div>
+                        </div>
+                        <div style="display: flex; gap: 8px; margin-left: 24px;">
+                            <button style="padding: 12px; color: #8E8E93;">操作</button>
+                        </div>
+                    </div>
+                </div>
+                <p style="font-size: 14px; color: #666; line-height: 1.5;">
+                    <strong>问题点：</strong><br>
+                    • 状态按钮与标题间距过大<br>
+                    • 整体padding过多，布局松散<br>
+                    • 响应时间869ms被错误标记为异常<br>
+                    • 卡片间距过大
+                </p>
+            </div>
+            
+            <div class="new-layout">
+                <div class="layout-title">优化后 (新布局)</div>
+                <div class="card">
+                    <div class="website-content">
+                        <div class="website-info">
+                            <div class="title-row">
+                                <div class="website-name">示例网站</div>
+                                <div class="status-badge status-healthy">
+                                    <span>✓</span>
+                                    <span>健康</span>
+                                </div>
+                                <div class="category-badge" style="background: #007AFF;">商业</div>
+                            </div>
+                            <div class="url-row">
+                                <span>🌐</span>
+                                <a href="#" class="url-link">https://example.com</a>
+                            </div>
+                            <div class="info-row">
+                                <span>⏱️ 869ms</span>
+                                <span>刚刚检查</span>
+                            </div>
+                        </div>
+                        <div class="actions">
+                            <button class="action-btn check">🔄</button>
+                            <button class="action-btn edit">✏️</button>
+                            <button class="action-btn delete">🗑️</button>
+                        </div>
+                    </div>
+                </div>
+                <p style="font-size: 14px; color: #666; line-height: 1.5;">
+                    <strong>改进点：</strong><br>
+                    • 状态按钮紧贴标题，布局紧凑<br>
+                    • 减少padding，提高空间利用率<br>
+                    • 869ms正确显示为健康状态<br>
+                    • 操作按钮垂直排列，节省空间<br>
+                    • 响应时间判断标准：1s内正常
+                </p>
+            </div>
+        </div>
+        
+        <div style="margin-top: 40px; padding: 20px; background: rgba(0, 122, 255, 0.1); border-radius: 12px; border-left: 4px solid #007AFF;">
+            <h3 style="color: #007AFF; margin-bottom: 12px;">🎯 优化总结</h3>
+            <ul style="color: #333; line-height: 1.8; padding-left: 20px;">
+                <li><strong>状态显示优化：</strong>状态按钮现在紧跟在网站标题后面，信息层次更清晰</li>
+                <li><strong>响应时间标准调整：</strong>1秒内为健康，1秒后为亚健康，更符合实际使用场景</li>
+                <li><strong>布局紧凑化：</strong>减少了不必要的padding和margin，提高信息密度</li>
+                <li><strong>操作按钮优化：</strong>改为垂直排列，减少水平空间占用</li>
+                <li><strong>视觉一致性：</strong>保持毛玻璃效果和圆角设计风格</li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>
